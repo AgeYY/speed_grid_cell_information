@@ -394,25 +394,19 @@ class SharedKernelGPModel:
     def fit(self, label, feamap_cp):
 
         if self.n_inducing is None:
-            label_ = tf.cast(label, dtype=FLOAT_TYPE)
-            feamap_cp_ = tf.cast(feamap_cp, dtype=FLOAT_TYPE)
-            self.model = gpflow.models.GPR(
-                (label_, feamap_cp_),
-                kernel=self.kernel,
-            )
-        else:
-            self.n_inducing = min(self.n_inducing, label.shape[0])
-            iv_idx = np.random.choice(np.arange(label.shape[0]), self.n_inducing, replace=False)
-            iv = label[iv_idx]
+            self.n_inducing = label.shape[0]
+        self.n_inducing = min(self.n_inducing, label.shape[0])
+        iv_idx = np.random.choice(np.arange(label.shape[0]), self.n_inducing, replace=False)
+        iv = label[iv_idx]
 
-            label_ = tf.cast(label, dtype=FLOAT_TYPE)
-            feamap_cp_ = tf.cast(feamap_cp, dtype=FLOAT_TYPE)
-            iv_ = tf.cast(iv, dtype=FLOAT_TYPE)
-            self.model = gpflow.models.SGPR(
-                (label_, feamap_cp_),
-                self.kernel,
-                inducing_variable=iv_,
-            )
+        label_ = tf.cast(label, dtype=FLOAT_TYPE)
+        feamap_cp_ = tf.cast(feamap_cp, dtype=FLOAT_TYPE)
+        iv_ = tf.cast(iv, dtype=FLOAT_TYPE)
+        self.model = gpflow.models.SGPR(
+            (label_, feamap_cp_),
+            self.kernel,
+            inducing_variable=iv_,
+        )
 
         opt = gpflow.optimizers.Scipy()
         opt.minimize(self.model.training_loss, self.model.trainable_variables, method="l-bfgs-b")

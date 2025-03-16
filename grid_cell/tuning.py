@@ -6,7 +6,7 @@ from scipy.signal import correlate2d
 from scipy.ndimage import rotate, correlate
 from scipy.stats import binned_statistic_2d
 from scipy.stats import zscore
-from filterpy.kalman import KalmanFilter
+# from filterpy.kalman import KalmanFilter
 import os
 
 def compute_bin_times(x, y, dt, n_bins, x_bound=None, y_bound=None):
@@ -66,49 +66,49 @@ def compute_speed(x, y, t, smooth_sigma=None):
     speed = np.sqrt(dx**2 + dy**2)
     return speed
 
-def compute_speed_kalman(x_positions, y_positions, times, process_noise=1, measurement_noise=100):
-    """
-    Estimate speed using a Kalman Filter given position and time data.
+# def compute_speed_kalman(x_positions, y_positions, times, process_noise=1, measurement_noise=100):
+#     """
+#     Estimate speed using a Kalman Filter given position and time data.
     
-    Parameters:
-    x_positions (array): Array of x-coordinates.
-    y_positions (array): Array of y-coordinates.
-    times (array): Array of timestamps.
-    process_noise (float): Process noise variance for the Q matrix.
-    measurement_noise (float): Measurement noise variance for the R matrix.
+#     Parameters:
+#     x_positions (array): Array of x-coordinates.
+#     y_positions (array): Array of y-coordinates.
+#     times (array): Array of timestamps.
+#     process_noise (float): Process noise variance for the Q matrix.
+#     measurement_noise (float): Measurement noise variance for the R matrix.
     
-    Returns:
-    speeds (array): Estimated speeds at each time point.
-    """
-    dt = np.diff(times)
-    dt = np.append(dt, dt[-1])  # Assume last interval is same as second to last
+#     Returns:
+#     speeds (array): Estimated speeds at each time point.
+#     """
+#     dt = np.diff(times)
+#     dt = np.append(dt, dt[-1])  # Assume last interval is same as second to last
 
-    # Initialize Kalman Filter
-    kf = KalmanFilter(dim_x=4, dim_z=2)
-    kf.F = np.array([[1, 0, dt[0], 0],
-                     [0, 1, 0, dt[0]],
-                     [0, 0, 1, 0],
-                     [0, 0, 0, 1]])
-    kf.H = np.array([[1, 0, 0, 0],
-                     [0, 1, 0, 0]])
-    kf.R *= measurement_noise
-    kf.Q = np.eye(4) * process_noise
-    kf.x = np.array([x_positions[0], y_positions[0], 0, 0])
+#     # Initialize Kalman Filter
+#     kf = KalmanFilter(dim_x=4, dim_z=2)
+#     kf.F = np.array([[1, 0, dt[0], 0],
+#                      [0, 1, 0, dt[0]],
+#                      [0, 0, 1, 0],
+#                      [0, 0, 0, 1]])
+#     kf.H = np.array([[1, 0, 0, 0],
+#                      [0, 1, 0, 0]])
+#     kf.R *= measurement_noise
+#     kf.Q = np.eye(4) * process_noise
+#     kf.x = np.array([x_positions[0], y_positions[0], 0, 0])
 
-    # Placeholder for estimated speeds
-    speeds = np.zeros(len(x_positions))
+#     # Placeholder for estimated speeds
+#     speeds = np.zeros(len(x_positions))
 
-    # Run Kalman Filter
-    for i in range(1, len(x_positions)):
-        kf.F = np.array([[1, 0, dt[i], 0],
-                         [0, 1, 0, dt[i]],
-                         [0, 0, 1, 0],
-                         [0, 0, 0, 1]])
-        kf.predict()
-        kf.update(np.array([x_positions[i], y_positions[i]]))
-        speeds[i] = np.sqrt(kf.x[2]**2 + kf.x[3]**2)
+#     # Run Kalman Filter
+#     for i in range(1, len(x_positions)):
+#         kf.F = np.array([[1, 0, dt[i], 0],
+#                          [0, 1, 0, dt[i]],
+#                          [0, 0, 1, 0],
+#                          [0, 0, 0, 1]])
+#         kf.predict()
+#         kf.update(np.array([x_positions[i], y_positions[i]]))
+#         speeds[i] = np.sqrt(kf.x[2]**2 + kf.x[3]**2)
 
-    return speeds
+#     return speeds
 
 
 def filter_spikes_by_speed(cell0, t, speed, speed_thre, speed_thre2=None):

@@ -27,14 +27,6 @@ class Kernel_Cov(tf.Module):
         self.r = np.array(r, dtype=FLOAT_TYPE)
         self.x = np.array(x, dtype=FLOAT_TYPE)
 
-    # def compute_gram(self, r, x):
-
-    #     if x.shape[1] != self.n_input:
-    #         raise ValueError('The input dimension does not match the kernel dimension')
-    #     self.r = np.array(r, dtype=FLOAT_TYPE)
-    #     self.x = np.array(x, dtype=FLOAT_TYPE)
-    #     self.gram = self._compute_gram(self.r, 0)  # (n_sample, n_neuron, n_neuron)
-
     def predict_cov(self, query, pred_batch_size=1000):
         query = np.array(query, dtype=FLOAT_TYPE)
         L = tf.linalg.band_part(self.kernel_prec_L, -1, 0)

@@ -318,10 +318,11 @@ def draw_line(ax, x, y, model, color='k', line_label='Fitted Line', data_label='
     ax.scatter(x, y, color=color, s=10, marker='o', label=data_label) # convert to cm
     return ax
 
-def draw_line_boot(ax, x, y, model, color='k', line_label='Fitted Line', data_label='Data', error_band_alpha=0.2, mode='BBLR'):
+def draw_line_boot(ax, x, y, model, color='k', line_label='Fitted Line', data_label='Data', error_band_alpha=0.2, mode='BBLR', draw_scatter_data=True):
     if mode == 'BBLR':
         x_mesh = np.linspace(x.min(), x.max(), 100)
         x_mesh = x_mesh[np.newaxis, :, np.newaxis]
+
         x_mesh_cat = np.concatenate([np.ones_like(x_mesh), x_mesh], axis=-1)
         y_mean, y_var = model.predict(x_mesh_cat)
 
@@ -338,8 +339,10 @@ def draw_line_boot(ax, x, y, model, color='k', line_label='Fitted Line', data_la
 
     ax.fill_between(x_mesh, y_upper, y_lower, color=color, alpha=error_band_alpha)
     ax.plot(x_mesh, y_mean, color=color, label=line_label)
-    ax.scatter(x, y, color=color, s=10, marker='o', label=data_label) # convert to cm
+    if draw_scatter_data:
+        ax.scatter(x, y, color=color, s=10, marker='o', label=data_label) # convert to cm
     return ax
+
 
 class BootstrapBLR():
     def __init__(self, BLR_prior_mean=0.0, BLR_prior_precision=1.0, BLR_beta=1.0, EPS=1e-6, laplace=True):

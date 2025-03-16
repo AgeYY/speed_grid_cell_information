@@ -11,18 +11,17 @@ from global_setting import *
 # Plot Results for eg_dn dataset                  #
 ##################################################
 dataset_names = ['r1m1', 'r1m2', 'r1m3', 'r2m1', 'r2m2', 'r2m3', 's1m1', 'q1m1', 'q1m2']
-ykeys = ['lattice_area', 'radius', 'center_dist', 'total_noise', 'noise_proj', 'noise_ratio', 'total_fisher']
+ykeys = ['lattice_area', 'radius', 'total_noise', 'noise_proj', 'total_fisher']
 y_label = [
     'Lattice Area' + r'($\mathrm{Hz}^2/\mathrm{cm}^2$)',
     'Torus Radius' + r'($\mathrm{Hz}$)',
-    'Torus Center Distance' + r'($\mathrm{Hz}$)',
     'Total Noise' + r'($\mathrm{Hz}^{2}$)',
     'Projected Noise' + r'($\mathrm{Hz}^{2}$)',
-    'Noise Ratio (a.u.)',
     'Total Fisher' + r'($\mathrm{cm}^{-2}$)',
+
 ]
 dn = dataset_names[1]
-n_pca = None
+n_pca = 6 # Set to None to use all dimensions
 iid_mode = False
 EPS = 1e-5 # std of the small noise will be added to the y data for numerical stability
 
@@ -51,14 +50,13 @@ for i, key in enumerate(ykeys):
 ##################################################
 # Plot Slope Graph for all datasets              #
 ##################################################
-y_keys = [ 'lattice_area', 'radius', 'center_dist', 'total_noise', 'noise_proj', 'noise_ratio', 'fisher', 'total_fisher']
+y_keys = [ 'lattice_area', 'radius', 'total_noise', 'noise_proj', 'fisher', 'total_fisher']
 y_label = [
     'Lattice Area-Speed Slope' + r'($\mathrm{Hz}/\mathrm{cm}^3$)',
     'Torus Radius-Speed Slope' + r'($\mathrm{cm}^{-1}$)',
     'Torus Center Distance-Speed Slope' + r'($\mathrm{cm}^{-1}$)',
     'Total Noise-Speed Slope' + r'($\mathrm{Hz} / \mathrm{cm}$)',
     'Projected Noise-Speed Slope' + r'($\mathrm{Hz} / \mathrm{cm}$)',
-    'Noise Ratio-Speed Slope (a.u.)',
     'Fisher-Speed Slope' + r'($\mathrm{s} / \mathrm{cm}^2$)',
     'Total Fisher-Speed Slope' + r'($\mathrm{s} / \mathrm{cm}^2$)',
 ]

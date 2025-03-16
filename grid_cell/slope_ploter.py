@@ -159,12 +159,13 @@ def plot_error_bars_with_text(ax, x_pos, slope, yerr, color, upper_text=None, lo
     ax.text(x_pos, slope - yerr[1] - y_text_offset * 3, lower_text, color=color, ha='center', fontsize=15)
     return ax
 
-def draw_two_line_data(speed_flat, y_flat, shuffle_y_flat, ax, data_label='Data', shuffle_label='Shuffled Data', color_data='tab:blue', color_shuffle='tab:grey'):
+def draw_two_line_data(speed_flat, y_flat, shuffle_y_flat, ax, data_label='Data', shuffle_label='Shuffled Data', color_data='tab:blue', color_shuffle='tab:grey', line_label=None):
     x = speed_flat
     model = fit_a_line(x, y_flat)
     slope, intercept, slope_conf_int, r2, p_value_intercept, p_value_slope = output_params(model)
-    draw_line(ax, x, y_flat, model, color=color_data, line_label=None, data_label=data_label)
+    draw_line(ax, x, y_flat, model, color=color_data, line_label=line_label, data_label=data_label)
     print(f'R-Squared: {model.r_squared:.2f}')
+
     print(f'p-value: {model.p_values[0]:.5f}, {model.p_values[1]:.5f}')
 
     if shuffle_y_flat is not None:
@@ -172,32 +173,35 @@ def draw_two_line_data(speed_flat, y_flat, shuffle_y_flat, ax, data_label='Data'
         slope, intercept, slope_conf_int, r2, p_value_intercept, p_value_slope = output_params(shuffle_model)
         print(f'R-Squared shuffle: {shuffle_model.r_squared:.2f}')
         print(f'p-value shuffle: {shuffle_model.p_values[0]:.5f}, {shuffle_model.p_values[1]:.5f}')
-        draw_line(ax, x, shuffle_y_flat, shuffle_model, color=color_shuffle, line_label=None, data_label=shuffle_label)
+        draw_line(ax, x, shuffle_y_flat, shuffle_model, color=color_shuffle, line_label=line_label, data_label=shuffle_label)
 
     return ax
 
-def draw_two_line_data_boot(speed, y, shuffle_y, ax, data_label='Data', shuffle_label='Shuffled Data', color_data='tab:blue', color_shuffle='tab:grey', mode='bootstrap'):
+def draw_two_line_data_boot(speed, y, shuffle_y, ax, data_label='Data', shuffle_label='Shuffled Data', color_data='tab:blue', color_shuffle='tab:grey', mode='bootstrap', draw_scatter_data=True, line_label=None):
     '''
     speed: (n_boot, m)
     y: (n_boot, m)
     mode: 'bootstrap' or 'BBLR'
     '''
     x = speed
+
     model = fit_a_line_boot(x, y, mode=mode)
     slope, intercept, slope_conf_int, r2, p_value_intercept, p_value_slope = output_params(model)
 
-    draw_line_boot(ax, x, y, model, color=color_data, line_label=None, data_label=data_label, mode=mode)
+    draw_line_boot(ax, x, y, model, color=color_data, line_label=line_label, data_label=data_label, mode=mode, draw_scatter_data=draw_scatter_data)
     print(f'R-Squared: {model.r_squared:.2f}')
     print(f'p-value: {model.p_values[0]:.5f}, {model.p_values[1]:.5f}')
+
 
     if shuffle_y is not None:
         shuffle_model = fit_a_line_boot(x, shuffle_y, mode=mode)
         slope, intercept, slope_conf_int, r2, p_value_intercept, p_value_slope = output_params_boot(shuffle_model)
         print(f'R-Squared shuffle: {shuffle_model.r_squared:.2f}')
         print(f'p-value shuffle: {shuffle_model.p_values[0]:.5f}, {shuffle_model.p_values[1]:.5f}')
-        draw_line_boot(ax, x, shuffle_y, shuffle_model, color=color_shuffle, line_label=None, data_label=shuffle_label, mode=mode)
+        draw_line_boot(ax, x, shuffle_y, shuffle_model, color=color_shuffle, line_label=line_label, data_label=shuffle_label, mode=mode, draw_scatter_data=draw_scatter_data)
 
     return ax
+
 
 def add_small_noise(data, eps=1e-5):
     return data + np.random.normal(0, scale=eps, size=data.shape)

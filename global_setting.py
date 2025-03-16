@@ -19,13 +19,18 @@ mpl.rcParams['legend.frameon'] = False
 RANDOM_STATE = 42
 np.random.seed(RANDOM_STATE)
 
-PYTHON_COMPUTING_DEVICE = os.environ['PYTHON_COMPUTING_DEVICE']
-if PYTHON_COMPUTING_DEVICE == 'local_computer':
+# PYTHON_COMPUTING_DEVICE = os.environ['PYTHON_COMPUTING_DEVICE']
+# if PYTHON_COMPUTING_DEVICE == 'local_computer':
+#     DATAROOT = './data/'
+# elif PYTHON_COMPUTING_DEVICE == 'high_performance_computer':
+#     DATAROOT = '/storage1/fs1/ralfwessel/Active/grid_cell/'
+# elif PYTHON_COMPUTING_DEVICE == 'high_performance_computer_physics':
+#     DATAROOT = '/data/zeyuan/grid_cell'
+
+try:
+    DATAROOT = os.environ['GRID_CELL_DATAROOT']
+except:
     DATAROOT = './data/'
-elif PYTHON_COMPUTING_DEVICE == 'high_performance_computer':
-    DATAROOT = '/storage1/fs1/ralfwessel/Active/grid_cell/'
-elif PYTHON_COMPUTING_DEVICE == 'high_performance_computer_physics':
-    DATAROOT = '/data/zeyuan/grid_cell'
 
 if not os.path.exists(DATAROOT): os.makedirs(DATAROOT)
 

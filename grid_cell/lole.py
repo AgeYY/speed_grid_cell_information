@@ -33,6 +33,7 @@ class LOLE:
         feamap_box = feamap[label_valide_idx]
         return label_box, feamap_box
 
+
     def lole_mse_box(self, feamap_train, label_train, feamap_test, label_test):
         self.model.fit(feamap_train, label_train)
         label_test_pred = self.model.predict(feamap_test)
@@ -76,11 +77,12 @@ class LOLE:
 
 
 class LOCF:
-    def __init__(self, model=None, box_size=[0.15, 0.15, 0.05], min_data=50, dl=1):
+    def __init__(self, model=None, box_size=[0.05, 0.05, 0.05], min_data=50, dl=1):
         '''
         ds (float): the length between two boxes (to be classfied) is 2 * dl
         '''
         self.model = model if model is not None else LogisticRegression(C=1)
+
         self.box_size = np.array(box_size)
         self.min_data = min_data
         self.dl = dl
@@ -105,6 +107,8 @@ class LOCF:
         label_box = label[label_valide_idx]
         feamap_box = feamap[label_valide_idx]
         return label_box, feamap_box
+
+
 
     def locf_accuracy_box(self, feamap_train, label_train, feamap_test, label_test):
         self.model.fit(feamap_train, label_train)

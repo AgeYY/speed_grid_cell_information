@@ -5,6 +5,7 @@ import grid_cell.tuning as gct
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 from sklearn.decomposition import PCA
+from scipy import stats
 import os
 from global_setting import *
 

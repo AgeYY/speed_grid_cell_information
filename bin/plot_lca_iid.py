@@ -54,7 +54,7 @@ fig.savefig(os.path.join(FIGROOT, f'accuracy_iid_all_dataset_pca{n_pca}.svg'))
 ##################################################
 
 #################### Plot example dataset's result ####################
-dn = 'r1m1'
+dn = 'r1m2'
 data = hkl.load(os.path.join(DATAROOT, f'accuracy_iid_{dn}_pca{n_pca}.hkl'))
 speed_bins = data['speed_bins']; accuracy = data['accuracy']; accuracy_shuffle = data['accuracy_shuffle']
 n_boot = accuracy.shape[0]

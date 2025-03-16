@@ -1,9 +1,8 @@
 # run fit_gkr_models.py first
 import numpy as np
-from ripser import Rips, ripser
+# from ripser import Rips, ripser
 # import ripserplusplus as rpp_py
 from gph import ripser_parallel
-from persim import plot_diagrams
 import hickle as hkl
 from grid_cell.ploter import scatter_torus_ploter, plot_barcodes
 from grid_cell.persistent_homology import find_quantile_lifetime, cloud_2_sparse_mat
@@ -15,7 +14,6 @@ from sklearn import datasets
 from sklearn.decomposition import PCA
 from umap import UMAP
 from sklearn.cluster import KMeans
-import skfuzzy as fuzz
 from global_setting import *
 
 ### Compute grey bar by computing zscore
