@@ -4,22 +4,34 @@
 This repository contains the implementation of the Gaussian Process with Kernel Regression (GKR) method, along with the code to reproduce figures from our paper, "Speed Modulations in Grid Cell Information Geometry." (doi: 10.1101/2024.09.18.613797)
 
 ## Quick Start with GKR
-For those interested in using only the GKR method, we provide a standalone `GKR_demo.ipynb` notebook that can be run on Google Colab or locally.
+For those interested in using only the GKR method, we provide three standalone notebooks that can be run on Google Colab or locally:
+
+- [`GKR_demo.ipynb`](GKR_demo.ipynb): the original GPflow/TensorFlow implementation.
+- [`GKR_demo_torch_colab.ipynb`](GKR_demo_torch_colab.ipynb): a self-contained PyTorch/GPyTorch implementation following the original demo workflow.
+- [`GKR_demo_torch_colab_kernel_init.ipynb`](GKR_demo_torch_colab_kernel_init.ipynb): the PyTorch/GPyTorch implementation with data-informed covariance-kernel initialization. It estimates the residual effective dimensionality, selects an initial kernel size through a target effective sample size, and visualizes the fitted manifold and local covariance against angle-dependent ground truth.
+
+The PyTorch notebooks inline the full implementation, include Colab dependency setup, and demonstrate fitting, prediction, output saving, and checkpoint reloading without importing code from this repository.
 
 ### Local Setup
 1. Install Python 3.10 (this version has been tested).
-2. Install the required dependencies:
+2. For the original GPflow/TensorFlow notebook, install the required dependencies:
    ```bash
    pip install -r requirements_gkr_demo.txt
    ```
+3. For either PyTorch notebook, install:
+   ```bash
+   pip install numpy matplotlib scikit-learn torch gpytorch
+   ```
 
 ### Optional GPU Support
-To enable GPU support, install CUDA dependencies via conda:
+For the GPflow/TensorFlow implementation, CUDA dependencies can be installed via conda:
 ```bash
 conda install cudatoolkit=11.2 cudnn=8.1
 ```
 
-### GKR_Fitter Class
+For the PyTorch implementations, install a CUDA-enabled PyTorch build appropriate for your system. The notebooks automatically use CUDA when it is available.
+
+### GPflow/TensorFlow `GKR_Fitter` Class
 ```python
 class GKR_Fitter:
     def __init__(n_input, n_output, circular_period=None, n_epochs=10, gpr_params=None):
